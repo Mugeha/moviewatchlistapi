@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="C:\Users\25475\OneDrive\movieWatchList\index.css">
+  </head>
+  <body>
+    <div class="header">
+      <h1>Find your film</h1>
+      <p><a href="C:\Users\25475\OneDrive\movieWatchList\watchlist.html">My WatchList</a></p>
+</div>
+<div class="header2">
+<input type="text" id="add" placeholder="Search for a movie" required>
+  <button id="search-btn">Search</button>
+  </div>
+<div id="container">
+  <img src="C:\Users\25475\OneDrive\movieWatchList\Icon (1).svg" style="margin:0 auto;vertical-align:center;padding-top:140px;width: 70px;
+height: 61.25px;color:#DFDDDD;padding-left:200px;"><p style="color:#DFDDDD;margin:0 auto;vertical-align:center;padding-left:190px">Start Exploring</p>
+</div>
+<script>
+
+   const searchBtn = document.getElementById('search-btn')
+   function searchClick(){
+     let titleId = document.getElementById('add').value
+     fetch(`http://www.omdbapi.com/?t=${titleId}&apikey=a6fd8f76`)
+     .then(res => res.json())
+     .then(data => {
+       if(data.Response === 'True'){
+         const movieTitle = data.Title
+         const movieYear = data.Year
+         const moviePoster = data.Poster
+         // const movieRated = data.Rated
+   const movieRuntime = data.Runtime
+   const movieGenre = data.Genre
+   const moviePlot = data.Plot
+          document.getElementById('container').innerHTML = `
+          <div class="cont">
+             <img src="${moviePoster}">
+             <div class="c">
+               <div class="a">
+            <h2>${movieTitle}</h2>
+            <p style="margin-left:30px;">${movieYear}</p>
+            </div>
+            <div class="b">
+            <p>${movieRuntime}</p>
+            <p>${movieGenre}</p>
+            <button onclick="addToWatchlist('${movieTitle}', '${movieYear}', '${moviePoster}', '${movieRuntime}', '${movieGenre}', '${moviePlot}')"><img  class="icon" src="C:/Users/25475/OneDrive/movieWatchList/Icon.svg" style="width:16px;height:16px;"></button>
+           <p>Add to WatchList</p>
+            </div>
+            <p style="font-size:12px;margin-left:10px;opacity:0.7;">${moviePlot}</p>
+         </div>
+            </div>
+          `
+       } else {
+         document.getElementById('container').innerHTML = `
+         <div class="substitute">
+           <p>Unable to find what you’re looking for. Please try another search.</p>
+           </div>
+         `
+       }
+ document.getElementById('add').value = '';
+     })
+   }
+   function addToWatchlist(title, year, poster, runtime, genre, plot) {
+    const movieData = { title, year, poster, runtime, genre, plot };
+    const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+    watchlist.push(movieData);
+    localStorage.setItem('watchlist', JSON.stringify(watchlist));
+
+}
+   searchBtn.addEventListener("click", searchClick)
+   </script>
+</body>
+</html>

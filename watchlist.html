@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="C:\Users\25475\OneDrive\movieWatchList\watchlist.css">
+  </head>
+  <body>
+    <div class="header">
+      <h1>My WatchList</h1>
+      <p><a href="C:\Users\25475\OneDrive\movieWatchList\index.html">Search for movies</a></p>
+</div>
+<div id="watchlist-container"></div>
+<script>
+  const watchlistData = JSON.parse(localStorage.getItem('watchlist')) || [];
+  const watchlistContainer = document.getElementById('watchlist-container');
+  if (watchlistData.length === 0) {
+       watchlistContainer.innerHTML = `<div class="emptyWatchList"><p style="color:#DFDDDD;">Your watchlist is looking a little empty...</p>
+       <p><img src="C:/Users/25475/OneDrive/movieWatchList/Icon.svg" style="width:16px;height:16px;"><span class="link"><a href="C:/Users/25475/OneDrive/movieWatchList/index.html" onclick="addMovies()">Lets add some movies!</span></p></div>`;
+     } else {
+       watchlistData.forEach(item => {
+         const movieTitle = item.title;
+         const movieYear = item.year;
+         const moviePoster = item.poster;
+         const movieRuntime = item.runtime;
+         const movieGenre = item.genre;
+         const moviePlot = item.plot;
+
+         const movieHtml = `
+           <div class="cont">
+             <img src="${moviePoster}">
+             <div class="c">
+               <div class="a">
+                 <h2>${movieTitle}</h2>
+                 <p style="margin-left:30px;opacity:0.7;font-size:12px;">${movieYear}</p>
+               </div>
+               <div class="b">
+                 <p>${movieRuntime}</p>
+                 <p>${movieGenre}</p>
+                 <button onclick="removeFromWatchList('${movieTitle}')"><img src="C:/Users/25475/OneDrive/movieWatchList/removebtn.svg" style="width:16px;height:16px;"></button>
+<p>remove</p>
+               </div>
+                <p style="opacity:0.7;font-size:12px;">${moviePlot}</p>
+             </div>
+           </div>
+         `;
+
+         watchlistContainer.innerHTML += movieHtml;
+       });
+     }
+     function removeFromWatchList(title){
+       const updatedWatchList = watchlistData.filter(item => item.title !== title)
+       localStorage.setItem('watchlist', JSON.stringify(updatedWatchList))
+     }
+     function addMovies(){
+       window.location.href = "C:/Users/25475/OneDrive/movieWatchList/index.html"
+     }
+  </script>
+
+
+</body>
